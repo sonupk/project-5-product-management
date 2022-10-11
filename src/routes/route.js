@@ -7,7 +7,7 @@ const { Authentication, authorisation } = require('../middlewares/auth')
 router.post("/register",createUser)
 router.post('/login', loginUser)
 router.get("/user/:userId/profile",Authentication,authorisation,getUser)
-router.post("/user/:userId/profile", Authentication,authorisation,updateuser)
+router.put("/user/:userId/profile", Authentication,authorisation,updateuser)
 
 //================================== product apis ============================================
 
