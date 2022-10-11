@@ -16,7 +16,7 @@ const createUser = async function (req, res) {
     try {
         let requestBody = req.body;
         let files = req.files
-        const { fname, lname, email, profileImage, password, phone, address } = requestBody //Destructuring
+        const { fname, lname, email, password, phone, address } = requestBody //Destructuring
 
         if (!Object.keys(requestBody).length) return res.status(400).send({ status: false, msg: "Enter some data" })
 
@@ -41,10 +41,15 @@ const createUser = async function (req, res) {
         let emailCheck = await userModel.findOne({ email: email })
         if (emailCheck) return res.status(409).send({ status: false, msg: "email is already used " })
         
+        // if (address && typeof address != "object") {
+        //     return res.status(400).send({ status: false, message: "Address is in wrong format" })
+        // };
         if (address) {
-            if(typeof address != "object") return res.status(400).send({status:false,message:"address is in wrong format"})
+        
             if (address.shipping) {
-            if(typeof address.shipping != "object") return res.status(400).send({status:false,message:"address is in wrong format"})
+                if (typeof address.shipping != "object") {
+                    return res.status(400).send({ status: false, message: "Shipping Address is in wrong format" })
+                }
                 // Mandatorys
                 if (!address.shipping.street) return res.status(400).send({ status: false, msg: "street is mandatory in Shipping" })
                 if (!address.shipping.city) return res.status(400).send({ status: false, msg: "city is mandatory in Shipping" })
@@ -55,7 +60,9 @@ const createUser = async function (req, res) {
                 if (!address.shipping.pincode.match(pincoderegex)) return res.status(400).send({ status: false, msg: "Pincode is not valid" })
             }
             if (address.billing) {
-            if(typeof address.billing != "object") return res.status(400).send({status:false,message:"address is in wrong format"})
+                if (typeof address.billing != "object") {
+                    return res.status(400).send({ status: false, message: "Shipping Address is in wrong format" })
+                }
                 // Mandatorys
                 if (!address.billing.street) return res.status(400).send({ status: false, msg: "street is mandatory in Shinpping" })
                 if (!address.billing.city) return res.status(400).send({ status: false, msg: "city is mandatory in Shinpping" })
@@ -82,5 +89,18 @@ const createUser = async function (req, res) {
     }
 }
 
-module.exports = { createUser }
+
+//================================= getting userdetails ===================================================
+const getUser = async function (req, res) {
+    try {
+        let userId = req.params.userId;
+        const user = await userModel.findOne({ _id: userId })
+        return res.status(200).send({ status: true, message: 'User Details', data: user })
+    } catch (error) {
+        res.status(500).send({ status: false, message: error.message })
+    }
+}
+
+
+module.exports = { createUser,getUser }
 
