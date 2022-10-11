@@ -37,17 +37,17 @@ const userSchema = new mongoose.Schema({
         shipping: {
             street: {
                 type: String,
-                require: true,
+                required: true,
                 trim: true
             },
             city: {
                 type: String,
-                require: true,
+                required: true,
                 trim: true
             },
             pincode: {
                 type: Number,
-                require: true,
+                required: true,
                 trim: true
             }
         },
@@ -55,17 +55,17 @@ const userSchema = new mongoose.Schema({
         billing: {
             street: {
                 type: String,
-                require: true,
+                required: true,
                 trim: true
             },
             city: {
                 type: String,
-                require: true,
+                required: true,
                 trim: true
             },
             pincode: {
                 type: Number,
-                require: true,
+                required: true,
                 trim: true
             }
         }

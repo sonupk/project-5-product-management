@@ -39,4 +39,8 @@ let isValidPincode = (num) => {
     return /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(num);
 }
 
+
+
+
+
 module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone}
