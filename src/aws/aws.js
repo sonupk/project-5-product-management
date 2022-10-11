@@ -6,7 +6,7 @@ aws.config.update({
     region: "ap-south-1",
 });
 
-var uploadFile = async (file) => {
+exports. uploadFile = async (file) => {
     return new Promise(function (resolve, reject) {
 
         let s3 = new aws.S3({ apiVersion: "2006-03-01" });
@@ -29,19 +29,4 @@ var uploadFile = async (file) => {
     });
 };
 
-exports.createCover = async function (req, res) {
-    try {
-        let files = req.files;
-        const obj = JSON.parse(JSON.stringify(req.body))
-        obj['hello'] = "hjhkhhk"
-        console.log(obj)
-        if (files && files.length > 0) {
-            let uploadedFileURL = await uploadFile(files[0]);
-            res.status(201).send({ msg: "file uploaded succesfully", data: uploadedFileURL });
-        } else {
-            res.status(400).send({ msg: "No file found" });
-        }
-    } catch (err) {
-        res.status(500).send({ msg: err });
-    }
-};
+
