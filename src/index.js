@@ -20,7 +20,7 @@ app.use("/",route)
 
 
 app.use((req, res) => { 
-    res.status(404).send({ status: 'Error', message: "The Path you are requesting is not available !!" }); 
+    return res.status(404).send({ status: false, message: "Invalid URL" }); 
 })
 
 

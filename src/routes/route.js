@@ -1,12 +1,14 @@
 const express = require("express")
 const router = express.Router()
-const userController = require('../controllers/userController')
+const {createUser,loginUser,getUser,updateuser} = require('../controllers/userController')
 const { Authentication, authorisation } = require('../middlewares/auth')
 
 //=================================== user apis ===============================================
-router.post('/login', userController.loginUser)
-router.post("/register",userController.createUser)
-router.get("/user/:userId/profile",Authentication,authorisation,userController.getUser)
+router.post("/register",createUser)
+router.post('/login', loginUser)
+router.get("/user/:userId/profile",Authentication,authorisation,getUser)
+router.post("/user/:userId/profile", Authentication,authorisation,updateuser)
+
 //================================== product apis ============================================
 
 
@@ -23,10 +25,6 @@ router.get("/user/:userId/profile",Authentication,authorisation,userController.g
 
 
 
-
-router.all("/*",(req,res)=>{
-    return res.status(404).send({status:false,message:"Invalid URL"})
-})
 
 
 

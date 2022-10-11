@@ -14,7 +14,7 @@ exports. uploadFile = async (file) => {
         var uploadParams = {
             ACL: "public-read",
             Bucket: "classroom-training-bucket",
-            Key: "group28/" + file.originalname,
+            Key: "group43/" + file.originalname,
             Body: file.buffer,
         };
 
