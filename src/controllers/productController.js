@@ -30,7 +30,7 @@ const createProduct = async function (req, res) {
 
         //==================================== price is required =========================================
         if (!price) return res.status(400).send({ status: false, message: "price is Required" });
-        if (!(validator.isValidNumber(price))) {
+        if (!(validator.isValidNumber(price) && typeof price == "number")) {
             return res.status(400).send({ status: false, message: "price should be a number" })
         }
 
@@ -85,7 +85,7 @@ const createProduct = async function (req, res) {
 
         //========================================= installments validations =========================================
         if (installments) {
-            if (!(validator.isValidNumber(installments))) {
+            if (!(validator.isValidNumber(price) && typeof installments == "number")) {
                 return res.status(400).send({ status: false, message: "installments should be a number" })
             }
         }
@@ -101,37 +101,6 @@ const createProduct = async function (req, res) {
 //========================================== get product details =========================================================
 
 const getProduct = async function (req, res) {
-    try {
-
-    }
-    catch (error) {
-        return res.status(500).send({ status: false, message: error.message })
-    }
-}
-
-//=========================================== get product by productid ==================================================
-const getProductById = async function (req, res) {
-    try {
-        let requestBody = req.params.productId
-        if (!mongoose.Types.ObjectId.isValid(requestBody)) {
-            return res.status(400).send({ status: false, message: "productid validation failed" })
-        }
-
-        let productCheck = await productModel.findById(requestBody)
-        if (!productCheck) return res.status(404).send({ status: false, message: "product not found" })
-        if (productCheck.isDeleted) return res.status(404).send({ status: false, message: "product is deleted" })
-
-        res.status(200).send({ status: false, data: productCheck })
-    }
-    catch (error) {
-        return res.status(500).send({ status: false, message: error.message })
-    }
-}
-
-
-//============================================= update product details ===================================================
-
-const updateProduct = async function (req, res) {
     try {
         let queryData = req.query
         //if no query then filter with isDeleted:false
@@ -193,6 +162,37 @@ const updateProduct = async function (req, res) {
         if (findFilter.length == 0)return res.status(404).send({ status: false, message: "No product Found" })
 
         return res.status(200).send({ status: true, message: `${findFilter.length} Matched Found`, data: findFilter })
+    }
+    catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
+}
+
+//=========================================== get product by productid ==================================================
+const getProductById = async function (req, res) {
+    try {
+        let requestBody = req.params.productId
+        if (!mongoose.Types.ObjectId.isValid(requestBody)) {
+            return res.status(400).send({ status: false, message: "productid validation failed" })
+        }
+
+        let productCheck = await productModel.findById(requestBody)
+        if (!productCheck) return res.status(404).send({ status: false, message: "product not found" })
+        if (productCheck.isDeleted) return res.status(404).send({ status: false, message: "product is deleted" })
+
+        res.status(200).send({ status: false, data: productCheck })
+    }
+    catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
+}
+
+
+//============================================= update product details ===================================================
+
+const updateProduct = async function (req, res) {
+    try {
+      
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
