@@ -136,7 +136,7 @@ const getUser = async function (req, res) {
 
 
 //======================================= updating users data ============================================
-const updateuser = async function (req, res) {
+const updateUser = async function (req, res) {
     try {
         let userId = req.params.userId;
         let body = req.body
@@ -225,6 +225,6 @@ const updateuser = async function (req, res) {
     }
 }
 
-module.exports = { createUser, loginUser ,getUser, updateuser}
+module.exports = { createUser, loginUser ,getUser, updateUser}
 
 

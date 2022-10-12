@@ -35,7 +35,7 @@ exports.Authentication = async (req, res, next) => {
 //========================================  authorisation =============================================
 
 
-exports.authorisation = async function (req, res, next) {
+exports.authorization = async function (req, res, next) {
     try {
         let userid = req.params.userId
         let validUser = req.decodedToken // userid from token
