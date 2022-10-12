@@ -30,7 +30,7 @@ const createProduct = async function (req, res) {
 
         //==================================== price is required =========================================
         if (!price) return res.status(400).send({ status: false, message: "price is Required" });
-        if (!(validator.isValidNumber(price) && typeof price == "number")) {
+        if (!(validator.isValidNumber(price))) {
             return res.status(400).send({ status: false, message: "price should be a number" })
         }
 
@@ -85,7 +85,7 @@ const createProduct = async function (req, res) {
 
         //========================================= installments validations =========================================
         if (installments) {
-            if (!(validator.isValidNumber(price) && typeof installments == "number")) {
+            if (!(validator.isValidNumber(installments))) {
                 return res.status(400).send({ status: false, message: "installments should be a number" })
             }
         }
