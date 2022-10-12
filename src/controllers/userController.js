@@ -218,13 +218,13 @@ const updateuser = async function (req, res) {
         }
         //=============================== data updation ==================================================
         let update = await userModel.findOneAndUpdate({ _id: userId }, data, { new: true })
-        return res.status(200).send({ status: true, message: "Success", data: update });
+        return res.status(200).send({ status: true, message: "Successfully updated", data: update });
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
     }
 }
 
-module.exports = { createUser, loginUser ,getUser,updateuser}
+module.exports = { createUser, loginUser ,getUser, updateuser}
 
 

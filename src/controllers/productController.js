@@ -30,7 +30,7 @@ const createProduct = async function (req, res) {
 
         //==================================== price is required =========================================
         if (!price) return res.status(400).send({ status: false, message: "price is Required" });
-        if (!(typeof price == "number")) {
+        if ((typeof price !== "number")) {
             return res.status(400).send({ status: false, message: "price should be a number" })
         }
 
@@ -74,16 +74,18 @@ const createProduct = async function (req, res) {
         //================================ availablesizes validation ==========================================
         if (!availableSizes) return res.status(400).send({ status: false, message: " availableSizes is Required" });
         if (availableSizes) {
-            // let size = availableSizes.toUpperCase().split(",") 
-            // data.availableSizes = size;
-            if ((["S", "XS", "M", "X", "L", "XXL", "XL"].indexOf(availableSizes.trim()) == -1)) {
-                return res.status(400).send({ status: false, msg: `availablesizes is required in given format, format: "S", "XS", "M", "X", "L", "XXL", "XL"` });
+            let size = availableSizes.toUpperCase().split(",") 
+            data.availableSizes = size;
+            for (let i = 0; i < data.availableSizes.length; i++) {
+                if (!validator.isValidSize(data.availableSizes[i])) {
+                    return res.status(400).send({ status: false, message: "Size should be one of these - 'S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'" });
                 }
+            }
         }
 
         //========================================= installments validations =========================================
         if (installments) {
-            if (!(typeof installments == "number")) {
+            if ((typeof installments !== "number")) {
                 return res.status(400).send({ status: false, message: "installments should be a number" })
             }
         }

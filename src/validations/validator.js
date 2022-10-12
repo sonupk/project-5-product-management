@@ -40,7 +40,12 @@ let isValidPincode = (num) => {
 }
 
 
+let isValidSize = (sizes) => {
+    return ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].includes(sizes);
+}
 
 
 
-module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone}
+
+
+module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize}
