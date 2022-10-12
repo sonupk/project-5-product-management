@@ -48,7 +48,11 @@ let isValidNumber = (String) => {
     return /\d/.test(String)
 }
 
+let isValidStatus = (status) => {
+    return ['pending', 'completed', 'cancelled'].includes(status);
+}
 
 
 
-module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize,isValidNumber}
+
+module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize,isValidNumber,isValidStatus}

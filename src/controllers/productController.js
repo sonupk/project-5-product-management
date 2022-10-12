@@ -54,13 +54,16 @@ const createProduct = async function (req, res) {
 
         //=================================== isfreeshipping validation ===================================
         if (isFreeShipping) {
-            if (typeof isFreeShipping !== "boolean") {
-                return res.status(400).send({ status: false, message: "Please enter true or false" })
+            if (typeof isFreeShipping == "string") {
+                data.isFreeShipping = isFreeShipping.toLowerCase();
+                if (isFreeShipping == 'true' || isFreeShipping == 'false') {
+                    isFreeShipping = JSON.parse(isFreeShipping)
+                } else {
+                    return res.status(400).send({ status: false, message: "Please enter true or false" }) 
+                }
             }
-            data.isFreeShipping = isFreeShipping.toLowerCase();
-
         }
-
+        
         //============================= productimage validation =============================================
         if (files.length == 0) return res.status(400).send({ status: false, message: "ProductImage is required" });
         let productImgUrl = await uploadFile(files[0]);
