@@ -44,8 +44,11 @@ let isValidSize = (sizes) => {
     return ['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].includes(sizes);
 }
 
+let isValidNumber = (String) => {
+    return /\d/.test(String)
+}
 
 
 
 
-module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize}
+module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize,isValidNumber}
