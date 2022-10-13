@@ -109,13 +109,14 @@ const getProduct = async function (req, res) {
     try {
         let queryData = req.query
         let { size, name, priceGreaterThan, priceLessThan, priceSort } = queryData
-        //if no query then filter with isDeleted:false
+        //===========================if no query then filter with isDeleted:false========================
         if (Object.keys(queryData).length == 0) {
             let filterData = await productModel.find({ isDeleted: false })
             return res.status(200).send({ status: true, message: `Found ${filterData.length} Items`, data: filterData })
         }
         let keys = "size, name, priceGreaterThan, priceLessThan, priceSort"
-
+        
+        //============================= if query is present ============================================
         if (size || priceSort || priceLessThan || priceGreaterThan || name) {
 
             let objectFilter = { isDeleted: false }
