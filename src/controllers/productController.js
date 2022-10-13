@@ -20,7 +20,7 @@ const createProduct = async function (req, res) {
         if (!validator.isValid(title)) return res.status(400).send({ status: false, message: "Title is in wrong format" });
         req.body.title = title.replace(/\s+/g, ' ').toLowerCase()
         //===================================== duplicate title ===========================================
-        let duplicateTitle = await productModel.findOne({ title: title })
+        let duplicateTitle = await productModel.findOne({ title: data.title })
         if (duplicateTitle) return res.status(400).send({ status: false, message: "Title already exist" })
 
         //==================================== description is mandatory ===============================

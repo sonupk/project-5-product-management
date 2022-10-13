@@ -24,7 +24,7 @@ const createUser = async function (req, res) {
         //=============================== validation for email ============================================
         if (!email) return res.status(400).send({ status: false, msg: "email is mandatory" })
         if (!validator.isValidEmail(email)) return res.status(400).send({ status: false, message: "Email is invalid" })
-        let emailCheck = await userModel.findOne({ email: email })
+        let emailCheck = await userModel.findOne({ email: requestBody.email })
         if (emailCheck) return res.status(409).send({ status: false, msg: "email is already used " })
 
         //============================= validation for password ===================================================
@@ -35,7 +35,7 @@ const createUser = async function (req, res) {
         //=========================== validation for phone ==================================================
         if (!phone) return res.status(400).send({ status: false, msg: "phone is mandatory" })
         if (!validator.isValidPhone(phone)) return res.status(400).send({ status: false, msg: "phone number is invalid , it should be starting with 6-9 and having 10 digits" })
-        let phoneCheck = await userModel.findOne({ phone: phone })
+        let phoneCheck = await userModel.findOne({ phone: requestBody.phone })
         if (phoneCheck) return res.status(409).send({ status: false, msg: "phone number is already used" })
         
         //============================== validation for profileimage =====================================
@@ -101,7 +101,7 @@ const loginUser = async function (req, res) {
             return res.status(400).send({ status: false, message: `Please fill valid or mandatory password ` })
 
         //=============================== if user does not exist ===========================================
-        let user = await userModel.findOne({ email: email });
+        let user = await userModel.findOne({ email: loginData.email });
         if (!user) {
             return res.status(404).send({ status: false, message: "User Not found" });
         }
@@ -152,28 +152,28 @@ const updateUser = async function (req, res) {
         //============================== fname validation ========================================
         if (fname) {
             if (!validator.isValidName(fname)) return res.status(400).send({ status: false, msg: "fname is not valid" })
-            let checkfname = await userModel.findOne({ fname: fname })
+            let checkfname = await userModel.findOne({ fname: body.fname })
             if (checkfname) return res.status(400).send({ status: false, message: "The Same fname is already present" })
             data.fname = fname;
         }
         //=============================== lname validation ===========================================
         if (lname) {
             if (!validator.isValidName(lname)) return res.status(400).send({ status: false, msg: "lname is not valid" })
-            let checklname = await userModel.findOne({ lname: lname })
+            let checklname = await userModel.findOne({ lname: body.lname })
             if (checklname) return res.status(400).send({ status: false, message: "The Same lname is already present" })
             data.lname = lname;
         }
         //================================ email validation ==========================================
         if (email) {
             if (!validator.isValidEmail(email)) return res.status(400).send({ status: false, message: "Please enter Valid email" })
-            let emailData = await userModel.findOne({ email: email });
+            let emailData = await userModel.findOne({ email: body.email });
             if (emailData) return res.status(400).send({ status: false, message: "The email is already Present" })
             data.email = email;
         }
         //========================== phone validation ==============================================
         if (phone) {
             if (!validator.isValidPhone(phone)) return res.status(400).send({ status: false, message: "Please enter Valid phone number" })
-            let phone = await userModel.findOne({ phone: phone });
+            let phone = await userModel.findOne({ phone: body.phone });
             if (phone) return res.status(400).send({ status: false, message: "The phone number is already Present" })
             data.phone = phone;
         }
