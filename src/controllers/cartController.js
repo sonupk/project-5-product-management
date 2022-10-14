@@ -17,7 +17,15 @@ const createCart = async function (req, res) {
 //=================================== get cart details =======================================
 
 const getCart = async function (req, res) {
-    try {
+    try { 
+        let userId = req.params.userId
+        //============================= checking the userid format =====================================
+        if (!validator.isValidObjectId(userId)) return res.status(400).send({ status: false, message: "invalid UserId" })
+        //===================== getting list of items in cart ====================================
+        let checkCart = await cartModel.findOne({ userId:userId }).populate([{ path: "items.productId" }])
+        if (!checkCart) return res.status(404).send({ status: false, message: "Cart not exist for this userId" })
+        //============================= fetching data ==============================================
+        return res.status(200).send({ status: true, message: "Successfull", data: checkCart })  
 
     }
     catch (error) {
