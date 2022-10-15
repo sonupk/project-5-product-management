@@ -183,6 +183,7 @@ const getProduct = async function (req, res) {
 
 
 //=========================================== get product by productid ================================
+
 const getProductById = async function (req, res) {
     try {
         let requestBody = req.params.productId

@@ -130,6 +130,20 @@ const updateCart = async function (req, res) {
 const deleteCart = async function (req, res) {
     try {
 
+        let userId = req.params.userId;
+
+        //====================== validating that cart is present with this user or not =======================
+        let findCart = await cartModel.findOne({ userId: userId });
+        if(!findCart){
+            return res.status(400).send({ status: false, message: "Cart does not exist .please create a cart first" });
+        }
+        if (findCart.items.length == 0) {
+            return res.status(400).send({ status: false, message: "Cart is empty" });
+        }
+        //===================== deleteing cart items ====================================================
+        await cartModel.updateOne({ _id: findCart._id },{ items: [], totalPrice: 0, totalItems: 0 });
+
+        return res.status(204).send({ status: false, message: "Deleted Sucessfully" });
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
