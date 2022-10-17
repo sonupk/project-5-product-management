@@ -56,10 +56,10 @@ const createCart = async function (req, res) {
                 let productFromItem = productInCart[i].productId.toString()
                 //==================== if product is already present in cart ==========================================
                 if (proId == productFromItem) {
-                    let oldQuant = productInCart[i].quantity
-                    let newquant = oldQuant + 1
+                    let oldCount = productInCart[i].quantity
+                    let newCount = oldCount + 1
                     let uptotal = (validCart.totalPrice + (productExist.price)).toFixed(2)
-                    productInCart[i].quantity = newquant
+                    productInCart[i].quantity = newCount
                     validCart.totalPrice = uptotal
                     await validCart.save();
                     await validCart.populate({ path: "items.productId", select: { price: 1, title: 1, productImage: 1, _id: 0 } })
