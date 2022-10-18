@@ -184,9 +184,15 @@ const updateUser = async function (req, res) {
         }
         //==================================== address validation ============================================
         if (address) {
-            const addressparse = JSON.parse(address)
+             let addressparse = JSON.parse(address)
+            if (typeof addressparse!= "object") {
+                return res.status(400).send({ status: false, message: "Address is in wrong format" })
+            }
 
             if (addressparse.shipping) {
+                if (typeof addressparse.shipping != "object") {
+                    return res.status(400).send({ status: false, message: "shipping Address is in wrong format" })
+                }
                 if (addressparse.shipping.street) {
                     data["address.shipping.street"] = addressparse.shipping.street
                 }
@@ -198,7 +204,11 @@ const updateUser = async function (req, res) {
                     data["address.shipping.pincode"] = addressparse.shipping.pincode
                 }
             }
+
             if (addressparse.billing) {
+                if (typeof addressparse.billing != "object") {
+                    return res.status(400).send({ status: false, message: "billing Address is in wrong format" })
+                }
                 if (addressparse.billing.street) {
                     data["address.billing.street"] = addressparse.billing.street
                 }
@@ -209,6 +219,7 @@ const updateUser = async function (req, res) {
                     if (!validator.isValidPincode(addressparse.billing.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
                     data["address.billing.pincode"] = addressparse.billing.pincode
                 }
+                   
             }
         }
         //============================ profileimage validation ================================================
