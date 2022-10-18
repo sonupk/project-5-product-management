@@ -173,8 +173,8 @@ const updateUser = async function (req, res) {
         //========================== phone validation ==============================================
         if (phone) {
             if (!validator.isValidPhone(phone)) return res.status(400).send({ status: false, message: "Please enter Valid phone number" })
-            let phone = await userModel.findOne({ phone: body.phone });
-            if (phone) return res.status(400).send({ status: false, message: "The phone number is already Present" })
+            let phoneData = await userModel.findOne({ phone: body.phone });
+            if (phoneData) return res.status(400).send({ status: false, message: "The phone number is already Present" })
             data.phone = phone;
         }
         //================================ password validation ============================================
@@ -188,26 +188,26 @@ const updateUser = async function (req, res) {
 
             if (addressparse.shipping) {
                 if (addressparse.shipping.street) {
-                    data.addressparse.shipping.street = addressparse.shipping.street
+                    data["address.shipping.street"] = addressparse.shipping.street
                 }
                 if (addressparse.shipping.city) {
-                    data.addressparse.shipping.city = addressparse.shipping.city
+                    data["address.shipping.city"]= addressparse.shipping.city
                 }
                 if (addressparse.shipping.pincode) {
-                    if (!validator.isValidPincode(pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
-                    data.addressparse.shipping.pincode = addressparse.shipping.pincode
+                    if (!validator.isValidPincode(addressparse.shipping.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
+                    data["address.shipping.pincode"] = addressparse.shipping.pincode
                 }
             }
             if (addressparse.billing) {
                 if (addressparse.billing.street) {
-                    data.addressparse.billing.street = addressparse.billing.street
+                    data["address.billing.street"] = addressparse.billing.street
                 }
                 if (addressparse.billing.city) {
-                    data.addressparse.billing.city = addressparse.billing.city
+                    data["address.billing.city"] = addressparse.billing.city
                 }
                 if (addressparse.billing.pincode) {
-                    if (!validator.isValidPincode(pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
-                    data.addressparse.billing.pincode = addressparse.billing.pincode
+                    if (!validator.isValidPincode(addressparse.billing.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
+                    data["address.billing.pincode"] = addressparse.billing.pincode
                 }
             }
         }
