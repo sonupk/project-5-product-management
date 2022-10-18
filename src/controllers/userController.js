@@ -173,8 +173,8 @@ const updateUser = async function (req, res) {
         //========================== phone validation ==============================================
         if (phone) {
             if (!validator.isValidPhone(phone)) return res.status(400).send({ status: false, message: "Please enter Valid phone number" })
-            let phone = await userModel.findOne({ phone: body.phone });
-            if (phone) return res.status(400).send({ status: false, message: "The phone number is already Present" })
+            let phoneData = await userModel.findOne({ phone: body.phone });
+            if (phoneData) return res.status(400).send({ status: false, message: "The phone number is already Present" })
             data.phone = phone;
         }
         //================================ password validation ============================================
@@ -184,31 +184,47 @@ const updateUser = async function (req, res) {
         }
         //==================================== address validation ============================================
         if (address) {
-            const addressparse = JSON.parse(address)
+             let addressparse = JSON.parse(address)
+           
+            if (typeof addressparse!= "object") {
+                return res.status(400).send({ status: false, message: "Address is in wrong format" })
+            }
+
 
             if (addressparse.shipping) {
-                if (addressparse.shipping.street) {
-                    data.addressparse.shipping.street = addressparse.shipping.street
+                if(typeof addressparse.shipping !="object")
+                return res.status(400).send({ status: false, message: "shipping address is in wrong format" })
+                if (!addressparse.shipping.street) {
+                    return res.status(400).send({ status: false, msg: "street is mandatory in Shipping" })
+
                 }
-                if (addressparse.shipping.city) {
-                    data.addressparse.shipping.city = addressparse.shipping.city
+                if (!addressparse.shipping.city) {
+                    return res.status(400).send({ status: false, msg: "city is mandatory in Shipping" })
                 }
-                if (addressparse.shipping.pincode) {
-                    if (!validator.isValidPincode(pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
-                    data.addressparse.shipping.pincode = addressparse.shipping.pincode
+                if (!addressparse.shipping.pincode) {
+                    return res.status(400).send({ status: false, msg: "pincode is mandatory in Shipping" })
                 }
+                if (!validator.isValidPincode(addressparse.shipping.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
+            data.addressparse["shipping"]=addressparse.shipping
             }
             if (addressparse.billing) {
-                if (addressparse.billing.street) {
-                    data.addressparse.billing.street = addressparse.billing.street
+                if (typeof addressparse.billing != "object") {
+                    return res.status(400).send({ status: false, message: "billing Address is in wrong format" })
                 }
-                if (addressparse.billing.city) {
-                    data.addressparse.billing.city = addressparse.billing.city
+    
+
+                if (!addressparse.billing.street) {
+                    return res.status(400).send({ status: false, msg: "street is mandatory in Shipping" })
                 }
-                if (addressparse.billing.pincode) {
-                    if (!validator.isValidPincode(pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
-                    data.addressparse.billing.pincode = addressparse.billing.pincode
+                if (!addressparse.billing.city) {
+                    return res.status(400).send({ status: false, msg: "city is mandatory in Shipping" })
                 }
+                if (!addressparse.billing.pincode) {
+                    return res.status(400).send({ status: false, msg: "pincode is mandatory in Shipping" })
+                
+                }
+                if (!validator.isValidPincode(addressparse.billing.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
+                data.address.billing=addressparse.billing       
             }
         }
         //============================ profileimage validation ================================================
