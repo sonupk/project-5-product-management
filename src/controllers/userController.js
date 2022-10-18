@@ -64,9 +64,9 @@ const createUser = async function (req, res) {
                 if (typeof Address.billing != "object") {
                     return res.status(400).send({ status: false, message: "Shipping Address is in wrong format" })
                 }
-                if (!Address.billing.street) return res.status(400).send({ status: false, msg: "street is mandatory in Shipping" })
-                if (!Address.billing.city) return res.status(400).send({ status: false, msg: "city is mandatory in Shipping" })
-                if (!Address.billing.pincode) return res.status(400).send({ status: false, msg: "pincode is mandatory in Shipping" })
+                if (!Address.billing.street) return res.status(400).send({ status: false, msg: "street is mandatory in billing" })
+                if (!Address.billing.city) return res.status(400).send({ status: false, msg: "city is mandatory in billing" })
+                if (!Address.billing.pincode) return res.status(400).send({ status: false, msg: "pincode is mandatory in billing" })
                 if (!validator.isValidName(Address.billing.city)) return res.status(400).send({ status: false, msg: " city name is not valid" })
                 if (!validator.isValidPincode(Address.billing.pincode)) return res.status(400).send({ status: false, msg: "Pincode is not valid" })
             }
