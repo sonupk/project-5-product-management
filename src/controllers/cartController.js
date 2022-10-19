@@ -138,7 +138,7 @@ const updateCart = async function (req, res) {
             return res.status(400).send({ status: false, message: "Body cannot be empty" });
 
         //=========================== only 2 keys should be entered in body ============================
-        if (!(cartId && removeProduct && productId)) {
+        if (!(cartId || removeProduct || productId)) {
             return res.status(400).send({ status: false, message: "enter valid keys to update cart i.e cartId,removeProduct,productId" })
         }
 
@@ -170,7 +170,7 @@ const updateCart = async function (req, res) {
 
 
         let productArr = cartExist.items.filter(x =>
-            x.productId.toString() == data.productId) // will return an array 
+            x.productId.toString() == body.productId) // will return an array 
 
         if (productArr.length == 0) {
             return res.status(404).send({ status: false, message: "product is not present in the cart" })
@@ -178,7 +178,7 @@ const updateCart = async function (req, res) {
         let indexNumber = cartExist.items.indexOf(productArr[0]) // return index no of productArr
 
         //============================ if removeProduct is present ===================================
-        if (removeProduct) {
+        //if (removeProduct) {
             if (validator.isValidNumber(removeProduct)) {
                 if (!(removeProduct == 0 || removeProduct == 1)) {
                     return res.status(400).send({ status: false, message: "removeProduct can either be 0 or 1" })
@@ -200,10 +200,10 @@ const updateCart = async function (req, res) {
                     await cartExist.save()
                     await cartExist.populate({ path: "items.productId", select: { price: 1, title: 1, productImage: 1, _id: 0 } })
                 }
-            }
-            else {
-                return res.status(400).send({ status: false, message: "removeProduct should be number only" })
-            }
+            //}
+            // else {
+            //     return res.status(400).send({ status: false, message: "removeProduct should be number only" })
+            // }
         }
         return res.status(200).send({ status: true, message: "Successfully updated", data: cartExist })
     }
