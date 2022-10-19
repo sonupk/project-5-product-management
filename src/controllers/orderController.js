@@ -45,7 +45,7 @@ const createOrder = async function (req, res) {
             if (!validator.isValidStatus(status))
                 return res.status(400).send({ status: false, message: "Status should be 'pending', 'completed', 'cancelled'" });
             if (status == 'cancelled'|| status == "completed") {
-                return res.status(400).send({ status: false, message: "status cannot be cancelled prior to creating a order" })
+                return res.status(400).send({ status: false, message: "status cannot be cancelled or completed prior to creating an order" })
             }
         }
         //=============================== if cancelleable is present in body =========================
