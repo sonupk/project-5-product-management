@@ -178,7 +178,6 @@ const updateCart = async function (req, res) {
         let indexNumber = cartExist.items.indexOf(productArr[0]) // return index no of productArr
 
         //============================ if removeProduct is present ===================================
-        //if (removeProduct) {
             if (validator.isValidNumber(removeProduct)) {
                 if (!(removeProduct == 0 || removeProduct == 1)) {
                     return res.status(400).send({ status: false, message: "removeProduct can either be 0 or 1" })
@@ -200,10 +199,6 @@ const updateCart = async function (req, res) {
                     await cartExist.save()
                     await cartExist.populate({ path: "items.productId", select: { price: 1, title: 1, productImage: 1, _id: 0 } })
                 }
-            //}
-            // else {
-            //     return res.status(400).send({ status: false, message: "removeProduct should be number only" })
-            // }
         }
         return res.status(200).send({ status: true, message: "Successfully updated", data: cartExist })
     }

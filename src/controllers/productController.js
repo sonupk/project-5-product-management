@@ -222,7 +222,7 @@ const updateProduct = async function (req, res) {
         //========================== product not found ==========================================
         if (!product) return res.status(404).send({ status: false, message: 'product not found' })
         //============================= if product is already deleted ============================
-        if (product.isDeleted == true) return res.status(400).send({ status: false, message: `Product is deleted` })
+        if (product.isDeleted == true) return res.status(404).send({ status: false, message: `Product is deleted` })
 
         //========================= if no keys are provided to update data========================
         if (!(title || description || price || currencyId || currencyFormat || isFreeShipping || style || availableSizes || installments || files)) {
