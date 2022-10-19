@@ -67,6 +67,9 @@ const createProduct = async function (req, res) {
         //============================= productimage validation =============================================
         if (files.length == 0) return res.status(400).send({ status: false, message: "ProductImage is required" });
         let productImgUrl = await uploadFile(files[0]);
+        if (!validator.validImage(productImgUrl)) {
+            return res.status(400).send({ status: false, msg: "productImage is in incorrect format" })
+        }
         data.productImage = productImgUrl;
 
         //=============================== style validation ===================================================

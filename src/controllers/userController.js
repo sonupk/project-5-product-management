@@ -41,6 +41,9 @@ const createUser = async function (req, res) {
         //============================== validation for profileimage =====================================
         if (files.length == 0) return res.status(400).send({ status: false, msg: "profileImage is mandatory" })
         let Image = await uploadFile(files[0]) // using aws for link creation 
+        if (!validator.validImage(Image)){
+            return res.status(400).send({ status: false, msg: "profileImage is in incorrect format" })
+        }
         requestBody.profileImage = Image
  
         //================================== validation for address =====================================

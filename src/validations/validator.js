@@ -14,6 +14,10 @@ const isValid = function (value) {
     return true;
 };
 
+const validImage = function (image) {
+    return /(\.jpg|\.jpeg|\.bmp|\.gif|\.png)$/.test(image)
+}
+
 
 let isValidName = function(name){
     let nameregex = /^[a-zA-Z\. ]*$/
@@ -55,4 +59,4 @@ let isValidStatus = (status) => {
 
 
 
-module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize,isValidNumber,isValidStatus}
+module.exports={isValid,isValidBody,isValidName,isValidEmail,isValidPassword,isValidObjectId,isValidPincode,isValidPhone,isValidSize,isValidNumber,isValidStatus,validImage}

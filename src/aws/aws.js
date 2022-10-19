@@ -17,12 +17,10 @@ exports. uploadFile = async (file) => {
             Key: "group43/" + file.originalname,
             Body: file.buffer,
         };
-       console.log(file)
         s3.upload(uploadParams, function (err, data) {
             if (err) {
                 return reject({ error: err });
             }
-            console.log(data)
             return resolve(data.Location);
         });
     });

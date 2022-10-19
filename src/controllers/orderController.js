@@ -44,6 +44,9 @@ const createOrder = async function (req, res) {
             }
             if (!validator.isValidStatus(status))
                 return res.status(400).send({ status: false, message: "Status should be 'pending', 'completed', 'cancelled'" });
+            if (status == 'cancelled'|| status == "completed") {
+                return res.status(400).send({ status: false, message: "status cannot be cancelled prior to creating a order" })
+            }
         }
         //=============================== if cancelleable is present in body =========================
         if (cancellable) {
@@ -60,7 +63,7 @@ const createOrder = async function (req, res) {
         }
 
         let totalQuantity = 0;
-        for (let i = 0; i < findingCart.items.length; i++){
+        for (let i = 0; i < findingCart.items.length; i++) {
             totalQuantity += findingCart.items[i].quantity;
         }
 
@@ -72,7 +75,7 @@ const createOrder = async function (req, res) {
         data.totalQuantity = totalQuantity;
 
         let result = await orderModel.create(data);
-       let cartUpdation =  await cartModel.updateOne({ _id: findingCart._id },{ items: [], totalPrice: 0, totalItems: 0 });
+        let cartUpdation = await cartModel.updateOne({ _id: findingCart._id }, { items: [], totalPrice: 0, totalItems: 0 });
 
         return res.status(201).send({ status: true, message: "Success", data: result })
 
