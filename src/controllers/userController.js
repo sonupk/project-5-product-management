@@ -10,7 +10,7 @@ const createUser = async function (req, res) {
         let requestBody = req.body;
         let files = req.files
         const { fname, lname, email, password, phone, address } = requestBody //Destructuring
-       //=========================== if body is empty ==================================================
+        //=========================== if body is empty ==================================================
         if (!validator.isValidBody(requestBody)) return res.status(400).send({ status: false, msg: "Enter some data to create user" })
 
         //============================= validation for fname ============================================
@@ -31,25 +31,31 @@ const createUser = async function (req, res) {
         if (!password) return res.status(400).send({ status: false, msg: "password is mandatory" })
         if (!validator.isValidPassword(password)) return res.status(400).send({ status: false, message: "password is invalid ,it should be of minimum 8 digits and maximum of 15 and should have atleast one special character and one number & one uppercase letter" })
         requestBody.password = await bcrypt.hash(password, 10) //using bcrypt for password hashing
-        
+
         //=========================== validation for phone ==================================================
         if (!phone) return res.status(400).send({ status: false, msg: "phone is mandatory" })
         if (!validator.isValidPhone(phone)) return res.status(400).send({ status: false, msg: "phone number is invalid , it should be starting with 6-9 and having 10 digits" })
         let phoneCheck = await userModel.findOne({ phone: requestBody.phone })
         if (phoneCheck) return res.status(409).send({ status: false, msg: "phone number is already used" })
-        
+
         //============================== validation for profileimage =====================================
         if (files.length == 0) return res.status(400).send({ status: false, msg: "profileImage is mandatory" })
         let Image = await uploadFile(files[0]) // using aws for link creation 
-        if (!validator.validImage(Image)){
+        if (!validator.validImage(Image)) {
             return res.status(400).send({ status: false, msg: "profileImage is in incorrect format" })
         }
         requestBody.profileImage = Image
- 
+
         //================================== validation for address =====================================
         if (!address) return res.status(400).send({ status: false, msg: "address is mandatory" })
         if (address) {
-            let Address = JSON.parse(address)
+            let Address
+            try {
+                Address = JSON.parse(address)
+            }
+            catch (err) {
+                return res.status(400).send({ status: false, message: "please provide adress in JSON object" })
+            }
             if (typeof Address != "object") {
                 return res.status(400).send({ status: false, message: "Address is in wrong format" })
             };
@@ -75,7 +81,7 @@ const createUser = async function (req, res) {
             }
         }
         requestBody.address = JSON.parse(requestBody.address)
-        
+
         //=========================== user creation ==========================================
         let created = await userModel.create(requestBody)
         res.status(201).send({ status: true, msg: "User successfully created", data: created })
@@ -116,7 +122,7 @@ const loginUser = async function (req, res) {
         }
         //=================================== token creation ================================================
         let token = jwt.sign({ "userId": user._id }, "project/booksManagementGroup43", { expiresIn: '24h' });
-        
+
 
         return res.status(200).send({ status: true, message: "login successfully", data: { userId: user._id, token: token } })
     } catch (err) {
@@ -146,10 +152,10 @@ const updateUser = async function (req, res) {
         let { fname, lname, email, phone, password, address } = body;
         let files = req.files
         const data = {};
-        
+
         //========================== if no data is provided to update =====================================
-        
-        if (!(fname || lname || email || phone||password||address||files)) {
+
+        if (!(fname || lname || email || phone || password || address || files)) {
             return res.status(400).send({ status: false, message: "enter keys to update user." })
         }
         //============================== fname validation ========================================
@@ -187,8 +193,14 @@ const updateUser = async function (req, res) {
         }
         //==================================== address validation ============================================
         if (address) {
-             let addressparse = JSON.parse(address)
-            if (typeof addressparse!= "object") {
+            let addressparse
+            try {
+                addressparse = JSON.parse(address)
+            }
+            catch (err) {
+                return res.status(400).send({ status: false, message: "please provide adress in JSON object" })
+            }
+            if (typeof addressparse != "object") {
                 return res.status(400).send({ status: false, message: "Address is in wrong format" })
             }
 
@@ -200,7 +212,7 @@ const updateUser = async function (req, res) {
                     data["address.shipping.street"] = addressparse.shipping.street
                 }
                 if (addressparse.shipping.city) {
-                    data["address.shipping.city"]= addressparse.shipping.city
+                    data["address.shipping.city"] = addressparse.shipping.city
                 }
                 if (addressparse.shipping.pincode) {
                     if (!validator.isValidPincode(addressparse.shipping.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
@@ -222,7 +234,7 @@ const updateUser = async function (req, res) {
                     if (!validator.isValidPincode(addressparse.billing.pincode)) return res.status(400).send({ status: false, message: "Please enter valid pincode" })
                     data["address.billing.pincode"] = addressparse.billing.pincode
                 }
-                   
+
             }
         }
         //============================ profileimage validation ================================================
@@ -242,6 +254,6 @@ const updateUser = async function (req, res) {
     }
 }
 
-module.exports = { createUser, loginUser ,getUser, updateUser}
+module.exports = { createUser, loginUser, getUser, updateUser }
 
 
