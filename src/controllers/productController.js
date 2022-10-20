@@ -233,11 +233,13 @@ const updateProduct = async function (req, res) {
         }
         //================================= if files is present =======================================
         if (files) {
-            if (files.length == 0) return res.status(400).send({ status: false, message: "please provide product Image" })
-            if (files.length > 0) {
-                data.productImage = await imgUpload.uploadFile(files[0])
+            let productImgUrl = await uploadFile(files[0]);
+            if (!validator.validImage(productImgUrl)) {
+                return res.status(400).send({ status: false, msg: "productImage is in incorrect format" })
             }
+            data.productImage = productImgUrl;
         }
+
 
         //==================================== if title is present ======================================
         if (title) {
@@ -319,6 +321,8 @@ const updateProduct = async function (req, res) {
         return res.status(500).send({ status: false, message: error.message })
     }
 }
+
+
 
 
 //================================================== delete products ====================================
