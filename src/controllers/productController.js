@@ -115,8 +115,8 @@ const getProduct = async function (req, res) {
         //===========================if no query then filter with isDeleted:false========================
         if (Object.keys(queryData).length == 0) {
             let filterData = await productModel.find({ isDeleted: false })
-            return res.status(200).send({ status: true, message: `Found ${filterData.length} Items`, data: filterData })
-        }
+            return res.status(200).send({ status: true,message: "Success", data: filterData })
+        } 
         let keys = "size, name, priceGreaterThan, priceLessThan, priceSort"
 
         //============================= if query is present ============================================
@@ -171,7 +171,7 @@ const getProduct = async function (req, res) {
             let findFilter = await productModel.find(objectFilter).sort({ price: priceSort })
             if (findFilter.length == 0) return res.status(404).send({ status: false, message: "No product Found" })
 
-            return res.status(200).send({ status: true, message: `${findFilter.length} Match Found`, data: findFilter })
+            return res.status(200).send({ status: true,message: "Success", data: findFilter })
         }
         else {
             return res.status(400).send({ status: false, message: `Cannot provide keys other than ${keys}` })
@@ -198,7 +198,7 @@ const getProductById = async function (req, res) {
         if (!productCheck) {
             return res.status(404).send({ status: false, message: "product not found or the product is deleted" })
         }
-        res.status(200).send({ status: true, data: productCheck })
+        res.status(200).send({ status: true,message: "Success", data: productCheck })
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
@@ -232,7 +232,7 @@ const updateProduct = async function (req, res) {
             return res.status(400).send({ status: false, message: `please enter valid key in body` })
         }
         //================================= if files is present =======================================
-        if (files) {
+        if (files && files.length != 0) {
             let productImgUrl = await uploadFile(files[0]);
             if (!validator.validImage(productImgUrl)) {
                 return res.status(400).send({ status: false, msg: "productImage is in incorrect format" })

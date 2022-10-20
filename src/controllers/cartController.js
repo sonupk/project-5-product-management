@@ -114,7 +114,7 @@ const getCart = async function (req, res) {
         let checkCart = await cartModel.findOne({ userId: userId }).populate({ path: "items.productId", select: { price: 1, title: 1, productImage: 1, _id: 0 } })
         if (!checkCart) return res.status(404).send({ status: false, message: "Cart not exist for this userId" })
         //============================= fetching data ==============================================
-        return res.status(200).send({ status: true, message: "Successfull", data: checkCart })
+        return res.status(200).send({ status: true, message: "Success", data: checkCart })
 
     }
     catch (error) {
