@@ -147,7 +147,7 @@ const updateOrder = async function (req, res) {
         }
         //============================== if order is already cancelled ================================
         if (findOrder.status === "cancelled") {
-            return res.status(400).send({ status: false, message: "Order is already cancelled" })
+            return res.status(400).send({ status: false, message: "Order is already cancleled" })
         }
 
         let newStatus = {}
@@ -155,7 +155,10 @@ const updateOrder = async function (req, res) {
             //========================= if order is not cancellable ====================================
             if (findOrder.cancellable == false && status == 'cancelled') {
                 return res.status(400).send({ status: false, message: "this order is not cancellable" })
-            } else {
+            } 
+            if(status == "cancelled") {
+                return res.status(200).send({ status: true, message: "The order is cancelled" })
+            }else {
                 newStatus.status = status
             }
         }
@@ -163,7 +166,7 @@ const updateOrder = async function (req, res) {
         //======================================== status updation =============================================
         let updateOrder = await orderModel.findByIdAndUpdate({ _id: findOrder._id }, newStatus, { new: true })
 
-        return res.status(200).send({ status: true, message: "Successfully updated", data: updateOrder })
+        return res.status(200).send({ status: true, message: "Success", data: updateOrder })
 
     }
     catch (error) {
