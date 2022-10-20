@@ -228,6 +228,9 @@ const updateUser = async function (req, res) {
         //============================ profileimage validation ================================================
         if (files && files.length != 0) {
             let profileImgUrl = await uploadFile(files[0]);
+            if (!validator.validImage(profileImgUrl)) {
+                return res.status(400).send({ status: false, msg: "productImage is in incorrect format" })
+            }
             data.profileImage = profileImgUrl;
         }
         //=============================== data updation ==================================================
