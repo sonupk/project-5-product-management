@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const { uploadFile } = require("../aws/aws")
 const validator = require("../validations/validator")
+const { request } = require("express")
 
 //========================================== creating user ===========================================
 const createUser = async function (req, res) {
@@ -26,6 +27,7 @@ const createUser = async function (req, res) {
         if (!validator.isValidEmail(email)) return res.status(400).send({ status: false, message: "Email is invalid" })
         let emailCheck = await userModel.findOne({ email: requestBody.email })
         if (emailCheck) return res.status(409).send({ status: false, msg: "email is already used " })
+        requestBody.email = email.toLowerCase()
 
         //============================= validation for password ===================================================
         if (!password) return res.status(400).send({ status: false, msg: "password is mandatory" })
@@ -177,7 +179,7 @@ const updateUser = async function (req, res) {
             if (!validator.isValidEmail(email)) return res.status(400).send({ status: false, message: "Please enter Valid email" })
             let emailData = await userModel.findOne({ email: body.email });
             if (emailData) return res.status(400).send({ status: false, message: "The email is already Present" })
-            data.email = email;
+            data.email = email.toLowerCase();
         }
         //========================== phone validation ==============================================
         if (phone) {
@@ -200,6 +202,7 @@ const updateUser = async function (req, res) {
             catch (err) {
                 return res.status(400).send({ status: false, message: "please provide adress in JSON object" })
             }
+            
             if (typeof addressparse != "object") {
                 return res.status(400).send({ status: false, message: "Address is in wrong format" })
             }
