@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const { uploadFile } = require("../aws/aws")
 const validator = require("../validations/validator")
-const { request } = require("express")
 
 //========================================== creating user ===========================================
 const createUser = async function (req, res) {
